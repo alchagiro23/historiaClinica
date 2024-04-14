@@ -11,6 +11,14 @@ def guardarDatoPaciente(persona):
     try:
         conexion.cursor.execute(sql)
         conexion.cerrarConexion()
+        title = 'Registrar Paciente'
+        mensaje = 'Paciente Registrado Exitosamente'
+        messagebox.showinfo(title, mensaje)
+    except:
+        title = 'Registrar Paciente'
+        mensaje = 'Error al registrar Paciente'
+        messagebox.showerror(title, mensaje)
+           
 
 
 
