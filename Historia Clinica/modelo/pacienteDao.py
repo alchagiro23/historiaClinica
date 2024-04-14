@@ -17,7 +17,7 @@ def guardarDatoPaciente(persona):
     except:
         title = 'Registrar Paciente'
         mensaje = 'Error al registrar Paciente'
-        messagebox.showerror(title, mensaje)
+        messagebox.showerror(title, mensaje) #GUARDADO HASTA AQUI
            
 
 
