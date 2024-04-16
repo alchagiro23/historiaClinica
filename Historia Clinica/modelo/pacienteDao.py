@@ -17,8 +17,54 @@ def guardarDatoPaciente(persona):
     except:
         title = 'Registrar Paciente'
         mensaje = 'Error al registrar Paciente'
-        messagebox.showerror(title, mensaje) #GUARDADO HASTA AQUI
-           
+        messagebox.showerror(title, mensaje) 
+
+def listar():
+    conexion = ConexionDB()
+    
+    listaPersona = []
+    sql = 'SELECT * FROM Persona WHERE activo = 1'
+
+    try:
+        conexion.cursor.execute(sql)
+        listaPersona = conexion.cursor.fetchall()
+        conexion.cerrarConexion()
+
+    except: 
+        title = 'Datos'
+        mensaje = 'Registros no Existen'
+        messagebox.showwarning(title, mensaje)
+    return listaPersona
+
+def listarCondicion(where):
+    conexion = ConexionDB()
+    listaPersona = []
+    sql = f'SELECT * FROM Persona {where}'
+
+    try:
+        conexion.cursor.execute(sql)
+        listaPersona = conexion.cursor.fetchall()
+        conexion.cerrarConexion()
+
+    except: 
+        title = 'Datos'
+        mensaje = 'Registros no Existen'
+        messagebox.showwarning(title, mensaje)   
+    return listaPersona    
+
+def eliminarPaciente(idPersona):
+    conexion = ConexionDB()
+    sql = f"""UPDATE Persona SET activo = 0 WHERE idPersona = {idPersona}"""
+    try:
+        conexion.cursor.execute(sql)
+        conexion.cerrarConexion()
+        title = 'Eliminar Paciente'
+        mensaje = 'Paciente eliminado exitosamente'
+        messagebox.showwarning(title, mensaje)
+    except:
+        title = 'Eliminar Paciente'
+        mensaje = 'Error al eliminar Paciente'
+        messagebox.showwarning(title, mensaje)
 
 
 

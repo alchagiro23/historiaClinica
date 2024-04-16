@@ -1,5 +1,7 @@
 import tkinter as tk
-from modelo.pacienteDao import Persona, guardarDatoPaciente
+from tkinter import *
+from tkinter import Button, ttk, scrolledtext, Toplevel
+from modelo.pacienteDao import Persona, guardarDatoPaciente, listarCondicion, listar
 from tkinter import font
 
 class Frame(tk.Frame):
@@ -10,6 +12,8 @@ class Frame(tk.Frame):
         self.pack()
         self.config(bg='#CDD8FF')
         self.camposPaciente()
+        self.deshabilitar()
+        self.tablaPaciente()
 
 
 # LABELS
@@ -98,7 +102,7 @@ class Frame(tk.Frame):
         self.entryTelefono.grid(column=1, row=8, padx=10, pady=5, columnspan=2)
 
         #BUTTONS
-        self.btnNuevo = tk.Button(self, text='Nuevo')
+        self.btnNuevo = tk.Button(self, text='Nuevo', command=self.habilitar)
         self.btnNuevo.config(width=20, font=('ARIAL',12,'bold'), fg='#DAD5D6', bg='#158645', cursor='hand2',activebackground='#35BD6F')
         self.btnNuevo.grid(column=0, row=9, padx=10, pady=5)
 
@@ -106,7 +110,7 @@ class Frame(tk.Frame):
         self.btnGuardar.config(width=20, font=('ARIAL',12,'bold'), fg='#DAD5D6', bg='#0475C6', cursor='hand2',activebackground='#68B3E9')
         self.btnGuardar.grid(column=1, row=9, padx=10, pady=5)
 
-        self.btnCancelar = tk.Button(self, text='Cancelar')
+        self.btnCancelar = tk.Button(self, text='Cancelar', command=self.deshabilitar)
         self.btnCancelar.config(width=20, font=('ARIAL',12,'bold'), fg='#DAD5D6', bg='#B00000', cursor='hand2',activebackground='#D27C7C')
         self.btnCancelar.grid(column=2, row=9, padx=10, pady=5)
 
@@ -116,13 +120,115 @@ class Frame(tk.Frame):
             self.svNombre.get(), self.svApePaterno.get(), self.svApeMaterno.get(), self.svCedula.get(), self.svFechNacimiento.get(), self.svEdad.get(), self.svAntecedentes.get(), self.svCorreo.get(), self.svTelefono.get()
         )
         guardarDatoPaciente(persona)
+        self.deshabilitar()
+        self.tablaPaciente()
+
+    def habilitar(self):
+        self.svNombre.set('')
+        self.svApePaterno.set('')
+        self.svApeMaterno.set('')
+        self.svCedula.set('')
+        self.svFechNacimiento.set('')
+        self.svEdad.set('')
+        self.svAntecedentes.set('')
+        self.svCorreo.set('')
+        self.svTelefono.set('')
+
+        self.entryNombre.config(state='normal')
+        self.entryApePaterno.config(state='normal')
+        self.entryApeMaterno.config(state='normal')
+        self.entryCedula.config(state='normal')
+        self.entryFechNacimiento.config(state='normal')
+        self.entryEdad.config(state='normal')
+        self.entryAntecedentes.config(state='normal')
+        self.entryCorreo.config(state='normal')
+        self.entryTelefono.config(state='normal')
+
+        self.btnGuardar.config(state='normal')
+        self.btnCancelar.config(state='normal')
+
 
     def deshabilitar(self):
+        self.svNombre.set('')
+        self.svApePaterno.set('')
+        self.svApeMaterno.set('')
+        self.svCedula.set('')
+        self.svFechNacimiento.set('')
+        self.svEdad.set('')
+        self.svAntecedentes.set('')
+        self.svCorreo.set('')
+        self.svTelefono.set('')
+
+
         self.entryNombre.config(state='disable')
-        self.en
+        self.entryApePaterno.config(state='disable')
+        self.entryApeMaterno.config(state='disable')
+        self.entryCedula.config(state='disable')
+        self.entryFechNacimiento.config(state='disable')
+        self.entryEdad.config(state='disable')
+        self.entryAntecedentes.config(state='disable')
+        self.entryCorreo.config(state='disable')
+        self.entryTelefono.config(state='disable')
 
+        self.btnGuardar.config(state='disabled')
+        self.btnCancelar.config(state='disable')
+
+    def tablaPaciente(self, where=""):
+
+        if len(where) > 0:
+            self.listaPersona = listarCondicion(where)
+        else:
+            self.listaPersona = listar()
+         #   self.listaPersona.reverse()    PARA QUE SALGAN EN ORDEN LOS ID
+
+        self.tabla = ttk.Treeview(self, column=('Nombre', 'Apaterno', 'AMaterno', 'cedula', 'FNacimiento', 'Edad', 'Antecedentes','Correo', 'Telefono'))    
+        self.tabla.grid(column=0, row=10, columnspan=10, sticky='nse')
         
+        self.scroll = ttk.Scrollbar(self, orient='vertical', command=self.tabla.yview)
+        self.scroll.grid(row=10, column=11, sticky='nse')
+
+        self.tabla.configure(yscrollcommand=self.scroll.set)
+
+        self.tabla.tag_configure('evenrow', background='#C5EAFE')
+
+        self.tabla.heading('#0',text='ID')
+        self.tabla.heading('#1',text='Nombre')
+        self.tabla.heading('#2',text='Apellido P')
+        self.tabla.heading('#3',text='Apellido M')
+        self.tabla.heading('#4',text='Cedula')
+        self.tabla.heading('#5',text='F Nacimiento')
+        self.tabla.heading('#6',text='Edad')
+        self.tabla.heading('#7',text='Antecedentes')
+        self.tabla.heading('#8',text='Correo')
+        self.tabla.heading('#9',text='Telefono')
+
+        self.tabla.column("#0", anchor=W, width=50)
+        self.tabla.column("#1", anchor=W, width=150)
+        self.tabla.column("#2", anchor=W, width=150)
+        self.tabla.column("#3", anchor=W, width=150)
+        self.tabla.column("#4", anchor=W, width=80)
+        self.tabla.column("#5", anchor=W, width=100)
+        self.tabla.column("#6", anchor=W, width=50)
+        self.tabla.column("#7", anchor=W, width=300)
+        self.tabla.column("#8", anchor=W, width=250)
+        self.tabla.column("#9", anchor=W, width=80)
 
 
+        for p in self.listaPersona:
+
+            self.tabla.insert('',0,text=p[0], values=(p[1],p[2],p[3],p[4],p[5],p[6],p[7],p[8],p[9]), tags=('evenrow',))
+
+# MAS BUTTONS (EDITAR, ELIMINAR, HISTORIA PACIENTE)
+        self.btnEditarPaciente = tk.Button(self, text='Editar Paciente')
+        self.btnEditarPaciente.config(width=20,font=('ARIAL',12,'bold'), fg='#DAD5D6', bg='#1E0075', activebackground='#9379E0', cursor='hand2')    
+        self.btnEditarPaciente.grid(row=11, column=0, padx=10, pady=5)
+
+        self.btnEliminarPaciente = tk.Button(self, text='Eliminar Paciente')
+        self.btnEliminarPaciente.config(width=20,font=('ARIAL',12,'bold'), fg='#DAD5D6', bg='#8A0000', activebackground='#D58A8A', cursor='hand2')    
+        self.btnEliminarPaciente.grid(row=11, column=1, padx=10, pady=5)
+
+        self.btnHistorialPaciente = tk.Button(self, text='Historial Paciente')
+        self.btnHistorialPaciente.config(width=20,font=('ARIAL',12,'bold'), fg='#DAD5D6', bg='#007C79', activebackground='#99F2F0', cursor='hand2')    
+        self.btnHistorialPaciente.grid(row=11, column=2, padx=10, pady=5)
 
 
