@@ -1,8 +1,10 @@
 import tkinter as tk
 from tkinter import *
 from tkinter import Button, ttk, scrolledtext, Toplevel
-from modelo.pacienteDao import Persona, guardarDatoPaciente, listarCondicion, listar
+from tkinter import messagebox
+from modelo.pacienteDao import Persona, guardarDatoPaciente, listarCondicion, listar, editarDatoPaciente
 from tkinter import font
+
 
 class Frame(tk.Frame):
     def __init__(self, root):
@@ -11,6 +13,7 @@ class Frame(tk.Frame):
         self.root = root
         self.pack()
         self.config(bg='#CDD8FF')
+        self.idPersona = None
         self.camposPaciente()
         self.deshabilitar()
         self.tablaPaciente()
@@ -119,11 +122,18 @@ class Frame(tk.Frame):
         persona = Persona(
             self.svNombre.get(), self.svApePaterno.get(), self.svApeMaterno.get(), self.svCedula.get(), self.svFechNacimiento.get(), self.svEdad.get(), self.svAntecedentes.get(), self.svCorreo.get(), self.svTelefono.get()
         )
-        guardarDatoPaciente(persona)
+
+        if self.idPersona == None:
+            guardarDatoPaciente(persona)
+        else:
+            editarDatoPaciente(persona, self.idPersona)
+
+
         self.deshabilitar()
         self.tablaPaciente()
 
     def habilitar(self):
+        #self.idPersona = None
         self.svNombre.set('')
         self.svApePaterno.set('')
         self.svApeMaterno.set('')
@@ -149,6 +159,7 @@ class Frame(tk.Frame):
 
 
     def deshabilitar(self):
+        self.idPersona = None
         self.svNombre.set('')
         self.svApePaterno.set('')
         self.svApeMaterno.set('')
@@ -219,7 +230,7 @@ class Frame(tk.Frame):
             self.tabla.insert('',0,text=p[0], values=(p[1],p[2],p[3],p[4],p[5],p[6],p[7],p[8],p[9]), tags=('evenrow',))
 
 # MAS BUTTONS (EDITAR, ELIMINAR, HISTORIA PACIENTE)
-        self.btnEditarPaciente = tk.Button(self, text='Editar Paciente')
+        self.btnEditarPaciente = tk.Button(self, text='Editar Paciente', command=self.editarPaciente)
         self.btnEditarPaciente.config(width=20,font=('ARIAL',12,'bold'), fg='#DAD5D6', bg='#1E0075', activebackground='#9379E0', cursor='hand2')    
         self.btnEditarPaciente.grid(row=11, column=0, padx=10, pady=5)
 
@@ -230,5 +241,34 @@ class Frame(tk.Frame):
         self.btnHistorialPaciente = tk.Button(self, text='Historial Paciente')
         self.btnHistorialPaciente.config(width=20,font=('ARIAL',12,'bold'), fg='#DAD5D6', bg='#007C79', activebackground='#99F2F0', cursor='hand2')    
         self.btnHistorialPaciente.grid(row=11, column=2, padx=10, pady=5)
+
+    def editarPaciente(self):
+        try:
+            self.idPersona = self.tabla.item(self.tabla.selection())['text'] #TRAE EL ID
+            self.nombrePaciente = self.tabla.item(self.tabla.selection())['values'][0]
+            self.apellidoPaternoPaciente = self.tabla.item(self.tabla.selection())['values'][1]
+            self.apellidoMaternoPaciente = self.tabla.item(self.tabla.selection())['values'][2]
+            self.cedulaPaciente = self.tabla.item(self.tabla.selection())['values'][3]
+            self.fechaNacimientoPaciente = self.tabla.item(self.tabla.selection())['values'][4]
+            self.edadPaciente = self.tabla.item(self.tabla.selection())['values'][5]
+            self.antecedentesPaciente = self.tabla.item(self.tabla.selection())['values'][6]
+            self.correoPaciente = self.tabla.item(self.tabla.selection())['values'][7]
+            self.telefonoPaciente = self.tabla.item(self.tabla.selection())['values'][8]
+
+            self.habilitar()
+
+            self.entryNombre.insert(0, self.nombrePaciente)
+            self.entryApePaterno.insert(0, self.apellidoPaternoPaciente)
+            self.entryApeMaterno.insert(0, self.apellidoMaternoPaciente)
+            self.entryCedula.insert(0, self.cedulaPaciente)
+            self.entryFechNacimiento.insert(0, self.fechaNacimientoPaciente)
+            self.entryEdad.insert(0, self.edadPaciente)
+            self.entryAntecedentes.insert(0, self.antecedentesPaciente)
+            self.entryCorreo.insert(0, self.correoPaciente)
+            self.entryTelefono.insert(0, self.telefonoPaciente)      
+        except:
+            title = 'Editar Paciente'
+            mensaje = 'Error al editar Paciente'
+            messagebox.showerror(title, mensaje)        
 
 
