@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import *
 from tkinter import Button, ttk, scrolledtext, Toplevel
 from tkinter import messagebox
-from modelo.pacienteDao import Persona, guardarDatoPaciente, listarCondicion, listar, editarDatoPaciente
+from modelo.pacienteDao import Persona, guardarDatoPaciente, listarCondicion, listar, editarDatoPaciente, eliminarPaciente
 from tkinter import font
 
 
@@ -234,7 +234,7 @@ class Frame(tk.Frame):
         self.btnEditarPaciente.config(width=20,font=('ARIAL',12,'bold'), fg='#DAD5D6', bg='#1E0075', activebackground='#9379E0', cursor='hand2')    
         self.btnEditarPaciente.grid(row=11, column=0, padx=10, pady=5)
 
-        self.btnEliminarPaciente = tk.Button(self, text='Eliminar Paciente')
+        self.btnEliminarPaciente = tk.Button(self, text='Eliminar Paciente', command=self.eliminarDatoPaciente)
         self.btnEliminarPaciente.config(width=20,font=('ARIAL',12,'bold'), fg='#DAD5D6', bg='#8A0000', activebackground='#D58A8A', cursor='hand2')    
         self.btnEliminarPaciente.grid(row=11, column=1, padx=10, pady=5)
 
@@ -269,6 +269,16 @@ class Frame(tk.Frame):
         except:
             title = 'Editar Paciente'
             mensaje = 'Error al editar Paciente'
-            messagebox.showerror(title, mensaje)        
+            messagebox.showerror(title, mensaje)   
 
-
+    def eliminarDatoPaciente(self):
+        try:
+            self.idPersona = self.tabla.item(self.tabla.selection())['text']
+            eliminarPaciente(self.idPersona)
+            
+            self.tablaPaciente()
+            self.idPersona = None
+        except:
+            title = 'Eliminar Paciente'
+            mensaje = 'No se pudo eliminar el paciente'
+            messagebox.showerror(title, mensaje)

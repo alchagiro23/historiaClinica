@@ -77,7 +77,7 @@ def eliminarPaciente(idPersona):
         conexion.cerrarConexion()
         title = 'Eliminar Paciente'
         mensaje = 'Paciente eliminado exitosamente'
-        messagebox.showwarning(title, mensaje)
+        messagebox.showinfo(title, mensaje)
     except:
         title = 'Eliminar Paciente'
         mensaje = 'Error al eliminar Paciente'
