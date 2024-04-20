@@ -117,6 +117,55 @@ class Frame(tk.Frame):
         self.btnCancelar.config(width=20, font=('ARIAL',12,'bold'), fg='#DAD5D6', bg='#B00000', cursor='hand2',activebackground='#D27C7C')
         self.btnCancelar.grid(column=2, row=9, padx=10, pady=5)
 
+
+        #BUSCADOR
+        #LABEL BUSCADOR
+        self.lblBuscarCedula = tk.Label(self, text='Buscar Cedula: ')
+        self.lblBuscarCedula.config(font=('ARIAL',15,'bold'), bg='#CDD8FF')
+        self.lblBuscarCedula.grid(column=3, row=0, padx=10, pady=5)
+
+        self.lblBuscarApellido = tk.Label(self, text='Buscar Apellido: ')
+        self.lblBuscarApellido.config(font=('ARIAL',15,'bold'), bg='#CDD8FF')
+        self.lblBuscarApellido.grid(column=3, row=1, padx=10, pady=5)
+
+        #ENTRYS BUSCADOR
+        self.svBuscarCedula = tk.StringVar()
+        self.entryBuscarCedula = tk.Entry(self, textvariable=self.svBuscarCedula)
+        self.entryBuscarCedula.config(width=25, font=('ARIAL',15))
+        self.entryBuscarCedula.grid(column=4, row=0, padx=10, pady=5, columnspan=2)
+
+        self.svBuscarApellido = tk.StringVar()
+        self.entryBuscarApellido = tk.Entry(self, textvariable=self.svBuscarApellido)
+        self.entryBuscarApellido.config(width=25, font=('ARIAL',15))
+        self.entryBuscarApellido.grid(column=4, row=1, padx=10, pady=5, columnspan=2)
+
+        #BUTTON BUSCAR
+        self.btnBuscarCondicion = tk.Button(self, text='Buscar', command= self.buscarCondicion)
+        self.btnBuscarCondicion.config(width=20, font=('ARIAL',12,'bold'), fg='#DAD5D6', bg='#00396F', cursor='hand2',activebackground='#5B8D8D')
+        self.btnBuscarCondicion.grid(column=3, row=2, padx=10, pady=5, columnspan=1)
+
+        self.btnLimpiarBuscador = tk.Button(self, text='Limpiar', command= self.limpiarBuscador)
+        self.btnLimpiarBuscador.config(width=20, font=('ARIAL',12,'bold'), fg='#DAD5D6', bg='#00396F', cursor='hand2',activebackground='#5B8D8D')
+        self.btnLimpiarBuscador.grid(column=4, row=2, padx=10, pady=5, columnspan=1)
+
+    def limpiarBuscador(self):     #LIMPIAR EL BUSCADOR
+        self.svBuscarApellido.set('')
+        self.svBuscarCedula.set('')
+        self.tablaPaciente()
+
+    def buscarCondicion(self):     # FUNCION BUSCAR
+        if len(self.svBuscarCedula.get()) > 0 or len(self.svBuscarApellido.get()) > 0:
+            where = "WHERE 1=1"
+            if (len(self.svBuscarCedula.get())) > 0:
+                where = "WHERE cedula = " + self.svBuscarCedula.get() + ""
+            if (len(self.svBuscarApellido.get())) > 0:
+                where = "WHERE apellidoPaterno LIKE '" + self.svBuscarApellido.get() + "%' AND activo = 1" 
+
+            self.tablaPaciente(where)
+        else:
+            self.tablaPaciente()
+
+
         
     def guardarPaciente(self):
         persona = Persona(
