@@ -4,6 +4,10 @@ from tkinter import Button, ttk, scrolledtext, Toplevel
 from tkinter import messagebox
 from modelo.pacienteDao import Persona, guardarDatoPaciente, listarCondicion, listar, editarDatoPaciente, eliminarPaciente
 from tkinter import font
+import tkcalendar as tc
+from tkcalendar import *
+from tkcalendar import Calendar
+from datetime import datetime, date
 
 
 class Frame(tk.Frame):
@@ -147,6 +151,50 @@ class Frame(tk.Frame):
         self.btnLimpiarBuscador = tk.Button(self, text='Limpiar', command= self.limpiarBuscador)
         self.btnLimpiarBuscador.config(width=20, font=('ARIAL',12,'bold'), fg='#DAD5D6', bg='#00396F', cursor='hand2',activebackground='#5B8D8D')
         self.btnLimpiarBuscador.grid(column=4, row=2, padx=10, pady=5, columnspan=1)
+
+        #BUTTON CALENDARIO
+        self.btnCalendario = tk.Button(self, text='Calendario', command= self.vistaCalendario)
+        self.btnCalendario.config(width=12, font=('ARIAL',12,'bold'), fg='#DAD5D6', bg='#00396F', cursor='hand2',activebackground='#5B8D8D')
+        self.btnCalendario.grid(column=3, row=4, padx=10, pady=5, columnspan=1)
+
+    def vistaCalendario(self):
+        self.calendario = Toplevel()
+        self.calendario.title("FECHA NACIMIENTO")
+        self.calendario.resizable(0,0)
+        self.calendario.config(bg='#CDD8FF')
+        
+        self.svCalendario = StringVar()
+        self.calendar = tc.Calendar(self.calendario, selectmode='day', year=1990, month=1, day=1, locale = 'es_US', bg='#777777', fg= '#FFFFFF', headersbackground='#B6DDFE', cursor='hand2', date_pattern='dd-mm-Y')
+        self.calendar.pack(pady=22)
+        self.calendar.grid(row=1, column = 0)
+        self.calendar.bind("<<CalendarSelected>>", self.enviarFecha)  # MODIFICACION QUE CORRIGE GPT
+        self.enviarFecha()
+     #   self.svCalendario.trace_add('write', self.enviarFecha)
+
+   # def enviarFecha(self, *args):
+   #     self.svFechNacimiento.set('' + self.svCalendario.get())
+
+
+    def enviarFecha(self, event=None):   #MODIFICACION QUE DA GPT (FUNCIONA)
+        selected_date = self.calendar.get_date()
+        self.svFechNacimiento.set(selected_date)
+        if len(self.calendar.get_date()) > 1:
+            self.calcularEdad() 
+
+
+      #  if len(self.calendar.get_date()) > 1:
+       #     self.svCalendario.trace()
+    def calcularEdad(self, *args):
+        self.fechaActual = date.today()
+        self.date1 = self.calendar.get_date()
+        self.conver = datetime.strptime(self.date1, "%d-%m-%Y")
+
+        self.resul = self.fechaActual.year - self.conver.year
+        self.resul -= ((self.fechaActual.month, self.fechaActual.day) < (self.conver.month, self.conver.day))
+        self.svEdad.set(self.resul)
+
+
+
 
     def limpiarBuscador(self):     #LIMPIAR EL BUSCADOR
         self.svBuscarApellido.set('')
