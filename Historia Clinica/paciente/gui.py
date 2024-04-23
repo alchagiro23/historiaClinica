@@ -3,6 +3,7 @@ from tkinter import *
 from tkinter import Button, ttk, scrolledtext, Toplevel
 from tkinter import messagebox
 from modelo.pacienteDao import Persona, guardarDatoPaciente, listarCondicion, listar, editarDatoPaciente, eliminarPaciente
+from modelo.historiaClinicaDao import historiaClinica, guardarHistoria
 from tkinter import font
 import tkcalendar as tc
 from tkcalendar import *
@@ -344,6 +345,21 @@ class Frame(tk.Frame):
         self.btnSalir = tk.Button(self, text='Salir', command=self.root.destroy)
         self.btnSalir.config(width=20,font=('ARIAL',12,'bold'), fg='#DAD5D6', bg='#000000', activebackground='#5E5E5E', cursor='hand2')    
         self.btnSalir.grid(row=11, column=4, padx=10, pady=5)
+
+
+    def historiaClinica (self):
+
+        try:
+            if self.idPersona == None:
+                self.idPersona
+
+            if (self.idPersona > 0):
+                idPersona = self.idPersona
+
+            self.topHistoriaClinica = Toplevel()
+            self.topHistoriaClinica.title('HISTORIA CLINICA')
+            self.topHistoriaClinica.resizable(0,0)
+            self.topHistoriaClinica.config(bg='#CDD8FF')
 
     def editarPaciente(self):
         try:
