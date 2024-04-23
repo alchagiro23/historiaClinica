@@ -253,6 +253,7 @@ class Frame(tk.Frame):
 
         self.btnGuardar.config(state='normal')
         self.btnCancelar.config(state='normal')
+        self.btnCalendario.config(state='normal')
 
 
     def deshabilitar(self):
@@ -268,18 +269,19 @@ class Frame(tk.Frame):
         self.svTelefono.set('')
 
 
-        self.entryNombre.config(state='disable')
-        self.entryApePaterno.config(state='disable')
-        self.entryApeMaterno.config(state='disable')
-        self.entryCedula.config(state='disable')
-        self.entryFechNacimiento.config(state='disable')
-        self.entryEdad.config(state='disable')
-        self.entryAntecedentes.config(state='disable')
-        self.entryCorreo.config(state='disable')
-        self.entryTelefono.config(state='disable')
+        self.entryNombre.config(state='disabled')
+        self.entryApePaterno.config(state='disabled')
+        self.entryApeMaterno.config(state='disabled')
+        self.entryCedula.config(state='disabled')
+        self.entryFechNacimiento.config(state='disabled')
+        self.entryEdad.config(state='disabled')
+        self.entryAntecedentes.config(state='disabled')
+        self.entryCorreo.config(state='disabled')
+        self.entryTelefono.config(state='disabled')
 
         self.btnGuardar.config(state='disabled')
-        self.btnCancelar.config(state='disable')
+        self.btnCancelar.config(state='disabled')
+        self.btnCalendario.config(state='disabled')
 
     def tablaPaciente(self, where=""):
 
@@ -338,6 +340,10 @@ class Frame(tk.Frame):
         self.btnHistorialPaciente = tk.Button(self, text='Historial Paciente')
         self.btnHistorialPaciente.config(width=20,font=('ARIAL',12,'bold'), fg='#DAD5D6', bg='#007C79', activebackground='#99F2F0', cursor='hand2')    
         self.btnHistorialPaciente.grid(row=11, column=2, padx=10, pady=5)
+
+        self.btnSalir = tk.Button(self, text='Salir', command=self.root.destroy)
+        self.btnSalir.config(width=20,font=('ARIAL',12,'bold'), fg='#DAD5D6', bg='#000000', activebackground='#5E5E5E', cursor='hand2')    
+        self.btnSalir.grid(row=11, column=4, padx=10, pady=5)
 
     def editarPaciente(self):
         try:
