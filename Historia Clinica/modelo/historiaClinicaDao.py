@@ -1,5 +1,12 @@
+from sqlite3.dbapi2 import Cursor
 from .conexion import ConexionDB
 from tkinter import messagebox
+
+def listarHistoria(idPersona):
+    conexion = ConexionDB()
+    listarHistoria = []
+    sql = f'SELECT * FROM historiaClinica h INNER JOIN Persona p ON p.idPersona = h.idPersona WHERE p.idPersona = {idPersona}'
+
 
 def guardarHistoria(idPersona, fechaHistoria, motivo, examenAuxiliar, tratamiento, detalle):
     conexion = ConexionDB()
