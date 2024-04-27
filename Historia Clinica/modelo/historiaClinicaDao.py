@@ -4,14 +4,25 @@ from tkinter import messagebox
 
 def listarHistoria(idPersona):
     conexion = ConexionDB()
-    listarHistoria = []
-    sql = f'SELECT * FROM historiaClinica h INNER JOIN Persona p ON p.idPersona = h.idPersona WHERE p.idPersona = {idPersona}'
+    listaHistoria = []
+    sql = f'SELECT h.idHistoriaClinica, p.apellidoPaterno || " " || p.apellidoMaterno AS Apellidos, h.fechaHistoria, h.motivo, h.examenAuxiliar, h.tratamiento, h.detalle FROM historiaClinica h INNER JOIN Persona p ON p.idPersona = h.idPersona WHERE p.idPersona = {idPersona}'
+    
+    try:
+        conexion.cursor.execute(sql)
+        listaHistoria = conexion.cursor.fetchall()
+        conexion.cerrarConexion()
+    except:
+        title = 'LISTAR HISTORIA'
+        mensaje = 'Error al listar historia Clinica'
+        messagebox.showerror(title, mensaje)
+
+    return listaHistoria
 
 
 def guardarHistoria(idPersona, fechaHistoria, motivo, examenAuxiliar, tratamiento, detalle):
     conexion = ConexionDB()
     sql = f"""INSERT INTO historiaClinica (idPersona, fechaHistoria, motivo, tratamiento, detalles)VALUES
-            ({idPersona},'{fechaHistoria}','{motivo}','{examenAuxiliar},'{tratamiento}','{detalle}')"""
+            ({idPersona},'{fechaHistoria}','{motivo}','{examenAuxiliar}',{tratamiento}','{detalle}')"""
     try:
         conexion.cursor.execute(sql)
         conexion.cerrarConexion()

@@ -3,7 +3,7 @@ from tkinter import *
 from tkinter import Button, ttk, scrolledtext, Toplevel
 from tkinter import messagebox
 from modelo.pacienteDao import Persona, guardarDatoPaciente, listarCondicion, listar, editarDatoPaciente, eliminarPaciente
-from modelo.historiaClinicaDao import historiaClinica, guardarHistoria
+from modelo.historiaClinicaDao import historiaClinica, guardarHistoria, listarHistoria
 from tkinter import font
 import tkcalendar as tc
 from tkcalendar import *
@@ -338,7 +338,7 @@ class Frame(tk.Frame):
         self.btnEliminarPaciente.config(width=20,font=('ARIAL',12,'bold'), fg='#DAD5D6', bg='#8A0000', activebackground='#D58A8A', cursor='hand2')    
         self.btnEliminarPaciente.grid(row=11, column=1, padx=10, pady=5)
 
-        self.btnHistorialPaciente = tk.Button(self, text='Historial Paciente')
+        self.btnHistorialPaciente = tk.Button(self, text='Historial Paciente', command=self.historiaClinica)
         self.btnHistorialPaciente.config(width=20,font=('ARIAL',12,'bold'), fg='#DAD5D6', bg='#007C79', activebackground='#99F2F0', cursor='hand2')    
         self.btnHistorialPaciente.grid(row=11, column=2, padx=10, pady=5)
 
@@ -351,7 +351,7 @@ class Frame(tk.Frame):
 
         try:
             if self.idPersona == None:
-                self.idPersona
+                self.idPersona = self.tabla.item(self.tabla.selection())['text']
 
             if (self.idPersona > 0):
                 idPersona = self.idPersona
@@ -360,6 +360,60 @@ class Frame(tk.Frame):
             self.topHistoriaClinica.title('HISTORIA CLINICA')
             self.topHistoriaClinica.resizable(0,0)
             self.topHistoriaClinica.config(bg='#CDD8FF')
+
+            self.listaHistoria = listarHistoria(idPersona)
+            self.tablaHistoria = ttk.Treeview(self.topHistoriaClinica, column=('Apellidos','Fecha Historia', 'Motivo','Examen Auxiliar','Tratamiento','Detalle'))
+            self.tablaHistoria.grid(row=0, column=0, columnspan=7, sticky='nse')
+
+            self.scrollHistoria = ttk.Scrollbar(self.topHistoriaClinica, orient='vertical', command=self.tablaHistoria.yview) 
+            self.scrollHistoria.grid(row=0, column=8, sticky='nse')
+
+            self.tablaHistoria.configure(yscrollcommand=self.scrollHistoria.set)
+            self.tablaHistoria.heading('#0', text='ID')
+            self.tablaHistoria.heading('#1', text='Apellidos')
+            self.tablaHistoria.heading('#2', text='Fecha y Hora')
+            self.tablaHistoria.heading('#3', text='Motivo')
+            self.tablaHistoria.heading('#4', text='Examen Auxiliar')
+            self.tablaHistoria.heading('#5', text='Tratamiento')
+            self.tablaHistoria.heading('#6', text='Detalle')
+
+            self.tablaHistoria.column('#0', anchor=W, width=50)
+            self.tablaHistoria.column('#1', anchor=W, width=100)
+            self.tablaHistoria.column('#2', anchor=W, width=100)
+            self.tablaHistoria.column('#3', anchor=W, width=120)
+            self.tablaHistoria.column('#4', anchor=W, width=250)
+            self.tablaHistoria.column('#5', anchor=W, width=200)
+            self.tablaHistoria.column('#6', anchor=W, width=500)
+
+            for p in self.listaHistoria:
+                self.tablaHistoria.insert('',0, text=p[0], values=(p[1],p[2],p[3],p[4],p[5],p[6]))
+
+            self.btnGuardarHistoria = tk.Button(self.topHistoriaClinica, text='Agregar Historia')
+            self.btnGuardarHistoria.config(width=20, font=('ARIAL', 12, 'bold'), fg='#DAD5D6', bg='#002771', cursor='hand2', activebackground='#7198E0')
+            self.btnGuardarHistoria.grid(row=2, column=0, padx=10, pady=5)
+
+            self.btnEditarHistoria = tk.Button(self.topHistoriaClinica, text='Editar Historia')
+            self.btnEditarHistoria.config(width=20, font=('ARIAL', 12, 'bold'), fg='#DAD5D6', bg='#002771', cursor='hand2', activebackground='#7198E0')
+            self.btnEditarHistoria.grid(row=2, column=1, padx=10, pady=5)
+
+            self.btnEliminarHistoria = tk.Button(self.topHistoriaClinica, text='Elminar Historia')
+            self.btnEliminarHistoria.config(width=20, font=('ARIAL', 12, 'bold'), fg='#DAD5D6', bg='#002771', cursor='hand2', activebackground='#7198E0')
+            self.btnEliminarHistoria.grid(row=2, column=2, padx=10, pady=5)
+
+            self.btnSalirHistoria = tk.Button(self.topHistoriaClinica, text='Salir', command=self.salirTop)
+            self.btnSalirHistoria.config(width=20, font=('ARIAL', 12, 'bold'), fg='#DAD5D6', bg='#002771', cursor='hand2', activebackground='#7198E0')
+            self.btnSalirHistoria.grid(row=2, column=6, padx=10, pady=5)
+
+        except:
+            title = 'Historia Clinica'
+            mensaje = 'Error al mostrar Historia'
+            messagebox.showerror(title, mensaje)
+
+
+    def salirTop(self):
+        self.topHistoriaClinica.destroy()
+
+
 
     def editarPaciente(self):
         try:
