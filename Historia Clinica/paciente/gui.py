@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import *
-from tkinter import Button, ttk, scrolledtext, Toplevel
+from tkinter import Button, ttk, scrolledtext, Toplevel, LabelFrame
 from tkinter import messagebox
 from modelo.pacienteDao import Persona, guardarDatoPaciente, listarCondicion, listar, editarDatoPaciente, eliminarPaciente
 from modelo.historiaClinicaDao import historiaClinica, guardarHistoria, listarHistoria
@@ -388,7 +388,7 @@ class Frame(tk.Frame):
             for p in self.listaHistoria:
                 self.tablaHistoria.insert('',0, text=p[0], values=(p[1],p[2],p[3],p[4],p[5],p[6]))
 
-            self.btnGuardarHistoria = tk.Button(self.topHistoriaClinica, text='Agregar Historia')
+            self.btnGuardarHistoria = tk.Button(self.topHistoriaClinica, text='Agregar Historia', command=self.topAgregarHistoria)
             self.btnGuardarHistoria.config(width=20, font=('ARIAL', 12, 'bold'), fg='#DAD5D6', bg='#002771', cursor='hand2', activebackground='#7198E0')
             self.btnGuardarHistoria.grid(row=2, column=0, padx=10, pady=5)
 
@@ -415,12 +415,12 @@ class Frame(tk.Frame):
         self.topAHistoria.resizable(0,0)
         self.topAHistoria.config(bg='#CDD8FF')
         #FRAME 1
-        self.frameDatosHistoria = tk.LabelFrame(self.topAgregarHistoria)
+        self.frameDatosHistoria = tk.LabelFrame(self.topAHistoria)
         self.frameDatosHistoria.config(bg='#CDD8FF')
         self.frameDatosHistoria.pack(fill="both", expand="yes", pady=10, padx=20)
 
         #LABELS AGREGAR HISTORIA CLINICA
-        self.lblMotivoHistoria = tk.Label(self.frameDatosHistoria, text='Motivo de la Historia medica', width=20, font=('ARIAL', 15,'bold'), bg='#CDD8FF')
+        self.lblMotivoHistoria = tk.Label(self.frameDatosHistoria, text='Motivo de la Historia medica', width=30, font=('ARIAL', 15,'bold'), bg='#CDD8FF')
         self.lblMotivoHistoria.grid(row=0, column=0, padx=5, pady=3)
 
         self.lblExamenAuxiliarHistoria = tk.Label(self.frameDatosHistoria, text='Examen Auxiliar', width=20, font=('ARIAL', 15,'bold'), bg='#CDD8FF')
@@ -429,37 +429,54 @@ class Frame(tk.Frame):
         self.lblTratamientoHistoria = tk.Label(self.frameDatosHistoria, text='Tratamiento', width=20, font=('ARIAL', 15,'bold'), bg='#CDD8FF')
         self.lblTratamientoHistoria.grid(row=4, column=0, padx=5, pady=3)
 
-        self.lblDetalleHistoria = tk.Label(self.frameDatosHistoria, text='Detalle de la Historia', width=20, font=('ARIAL', 15,'bold'), bg='#CDD8FF')
+        self.lblDetalleHistoria = tk.Label(self.frameDatosHistoria, text='Detalle de la Historia', width=30, font=('ARIAL', 15,'bold'), bg='#CDD8FF')
         self.lblDetalleHistoria.grid(row=6, column=0, padx=5, pady=3)
 
         # ENTRYS AGREGAR HISTORIA CLINICA
         self.svMotivoHistoria = tk.StringVar()
-        self.motivoHistoria = tk.Entry(self.topAgregarHistoria, textvariable=self.svMotivoHistoria)
-        self.motivoHistoria.config(width=40, font=('ARIAL', 15))
+        self.motivoHistoria = tk.Entry(self.frameDatosHistoria, textvariable=self.svMotivoHistoria)
+        self.motivoHistoria.config(width=70, font=('ARIAL', 15))
         self.motivoHistoria.grid(row=1, column=0, padx=5, pady=3, columnspan=2)
 
         self.svExamenAuxiliarHistoria = tk.StringVar()
-        self.examenAuxiliarHistoria = tk.Entry(self.topAgregarHistoria, textvariable=self.svExamenAuxiliarHistoria)
-        self.examenAuxiliarHistoria.config(width=40, font=('ARIAL', 15))
+        self.examenAuxiliarHistoria = tk.Entry(self.frameDatosHistoria, textvariable=self.svExamenAuxiliarHistoria)
+        self.examenAuxiliarHistoria.config(width=70, font=('ARIAL', 15))
         self.examenAuxiliarHistoria.grid(row=3, column=0, padx=5, pady=3, columnspan=2)
 
         self.svTratamientoHistoria = tk.StringVar()
-        self.tratamientoHistoria = tk.Entry(self.topAgregarHistoria, textvariable=self.svTratamientoHistoria)
-        self.tratamientoHistoria.config(width=40, font=('ARIAL', 15))
+        self.tratamientoHistoria = tk.Entry(self.frameDatosHistoria, textvariable=self.svTratamientoHistoria)
+        self.tratamientoHistoria.config(width=70, font=('ARIAL', 15))
         self.tratamientoHistoria.grid(row=5, column=0, padx=5, pady=3, columnspan=2)
 
         self.svDetalleHistoria = tk.StringVar()
-        self.detalleHistoria = tk.Entry(self.topAgregarHistoria, textvariable=self.svDetalleHistoria)
-        self.detalleHistoria.config(width=40, font=('ARIAL', 15))
+        self.detalleHistoria = tk.Entry(self.frameDatosHistoria, textvariable=self.svDetalleHistoria)
+        self.detalleHistoria.config(width=70, font=('ARIAL', 15))
         self.detalleHistoria.grid(row=7, column=0, padx=5, pady=3, columnspan=2)
         # FRAME 2
-        self.frameFechaHistoria = tk.LabelFrame(self.topAgregarHistoria)
+        self.frameFechaHistoria = tk.LabelFrame(self.topAHistoria)
         self.frameFechaHistoria.config(bg='#CDD8FF')
         self.frameFechaHistoria.pack(fill="both", expand="yes", pady=10, padx=20)
 
         #LABEL FECHA AGREGAR HISTORIA 
-        self.lblFechaHistoria = tk.Label(self.topAgregarHistoria, text='Fecha y Hora', width=20, font=('ARIAL', 15), bg='#CDD8FF')
+        self.lblFechaHistoria = tk.Label(self.frameFechaHistoria, text='Fecha y Hora', width=20, font=('ARIAL', 15, 'bold'), bg='#CDD8FF')
         self.lblFechaHistoria.grid(row=1, column=0, padx=5, pady=3)
+        
+        #ENTRY FECHA AGREGAR HISTORIA
+        self.svFechaHistoria = tk.StringVar()
+        self.entryFechaHistoria = tk.Entry(self.frameFechaHistoria, textvariable=self.svFechaHistoria)
+        self.entryFechaHistoria.config(width=20, font=('ARIAL', 15))
+        self.entryFechaHistoria.grid(row=1, column=1, pady=3, padx=5)
+        #TRAER FECHA ACTUAL
+        self.svFechaHistoria.set(datetime.today().strftime('%d-%m-%Y %H:%M'))
+
+        #BUTTONS AGREGAR HISTORIA
+        self.btnAgregarHistoria = tk.Button(self.frameFechaHistoria, text='Agregar Historia')
+        self.btnAgregarHistoria.config(width=20, font=('ARIAL', 12, 'bold'), fg='#DAD5D6', bg='#000992', cursor='hand2', activebackground='#4E56C6')
+        self.btnAgregarHistoria.grid(row=2, column=0, padx=10, pady=5)
+
+        self.btnSalirAgregarHistoria = tk.Button(self.frameFechaHistoria, text='Salir', command=self.topAHistoria.destroy)
+        self.btnSalirAgregarHistoria.config(width=20, font=('ARIAL', 12, 'bold'), fg='#DAD5D6', bg='#000992', cursor='hand2', activebackground='#4E56C6')
+        self.btnSalirAgregarHistoria.grid(row=2, column=3, padx=10, pady=5)
         
 
 
