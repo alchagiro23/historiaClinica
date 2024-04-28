@@ -409,6 +409,59 @@ class Frame(tk.Frame):
             mensaje = 'Error al mostrar Historia'
             messagebox.showerror(title, mensaje)
 
+    def topAgregarHistoria(self):
+        self.topAHistoria = Toplevel()
+        self.topAHistoria.title('AGREGAR HISTORIA')
+        self.topAHistoria.resizable(0,0)
+        self.topAHistoria.config(bg='#CDD8FF')
+        #FRAME 1
+        self.frameDatosHistoria = tk.LabelFrame(self.topAgregarHistoria)
+        self.frameDatosHistoria.config(bg='#CDD8FF')
+        self.frameDatosHistoria.pack(fill="both", expand="yes", pady=10, padx=20)
+
+        #LABELS AGREGAR HISTORIA CLINICA
+        self.lblMotivoHistoria = tk.Label(self.frameDatosHistoria, text='Motivo de la Historia medica', width=20, font=('ARIAL', 15,'bold'), bg='#CDD8FF')
+        self.lblMotivoHistoria.grid(row=0, column=0, padx=5, pady=3)
+
+        self.lblExamenAuxiliarHistoria = tk.Label(self.frameDatosHistoria, text='Examen Auxiliar', width=20, font=('ARIAL', 15,'bold'), bg='#CDD8FF')
+        self.lblExamenAuxiliarHistoria.grid(row=2, column=0, padx=5, pady=3)
+
+        self.lblTratamientoHistoria = tk.Label(self.frameDatosHistoria, text='Tratamiento', width=20, font=('ARIAL', 15,'bold'), bg='#CDD8FF')
+        self.lblTratamientoHistoria.grid(row=4, column=0, padx=5, pady=3)
+
+        self.lblDetalleHistoria = tk.Label(self.frameDatosHistoria, text='Detalle de la Historia', width=20, font=('ARIAL', 15,'bold'), bg='#CDD8FF')
+        self.lblDetalleHistoria.grid(row=6, column=0, padx=5, pady=3)
+
+        # ENTRYS AGREGAR HISTORIA CLINICA
+        self.svMotivoHistoria = tk.StringVar()
+        self.motivoHistoria = tk.Entry(self.topAgregarHistoria, textvariable=self.svMotivoHistoria)
+        self.motivoHistoria.config(width=40, font=('ARIAL', 15))
+        self.motivoHistoria.grid(row=1, column=0, padx=5, pady=3, columnspan=2)
+
+        self.svExamenAuxiliarHistoria = tk.StringVar()
+        self.examenAuxiliarHistoria = tk.Entry(self.topAgregarHistoria, textvariable=self.svExamenAuxiliarHistoria)
+        self.examenAuxiliarHistoria.config(width=40, font=('ARIAL', 15))
+        self.examenAuxiliarHistoria.grid(row=3, column=0, padx=5, pady=3, columnspan=2)
+
+        self.svTratamientoHistoria = tk.StringVar()
+        self.tratamientoHistoria = tk.Entry(self.topAgregarHistoria, textvariable=self.svTratamientoHistoria)
+        self.tratamientoHistoria.config(width=40, font=('ARIAL', 15))
+        self.tratamientoHistoria.grid(row=5, column=0, padx=5, pady=3, columnspan=2)
+
+        self.svDetalleHistoria = tk.StringVar()
+        self.detalleHistoria = tk.Entry(self.topAgregarHistoria, textvariable=self.svDetalleHistoria)
+        self.detalleHistoria.config(width=40, font=('ARIAL', 15))
+        self.detalleHistoria.grid(row=7, column=0, padx=5, pady=3, columnspan=2)
+        # FRAME 2
+        self.frameFechaHistoria = tk.LabelFrame(self.topAgregarHistoria)
+        self.frameFechaHistoria.config(bg='#CDD8FF')
+        self.frameFechaHistoria.pack(fill="both", expand="yes", pady=10, padx=20)
+
+        #LABEL FECHA AGREGAR HISTORIA 
+        self.lblFechaHistoria = tk.Label(self.topAgregarHistoria, text='Fecha y Hora', width=20, font=('ARIAL', 15), bg='#CDD8FF')
+        self.lblFechaHistoria.grid(row=1, column=0, padx=5, pady=3)
+        
+
 
     def salirTop(self):
         self.topHistoriaClinica.destroy()
